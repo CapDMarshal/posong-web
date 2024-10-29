@@ -1,0 +1,182 @@
+body{
+    font-family: "Quattrocento Sans", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #E8DFCA;
+    margin: 0;
+    padding: 0;
+}
+
+.quattrocento-regular {
+    font-family: "Quattrocento", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+.quattrocento-bold {
+    font-family: "Quattrocento", serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+.quattrocento-sans-regular {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+.quattrocento-sans-bold {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+.quattrocento-sans-regular-italic {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+.quattrocento-sans-bold-italic {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+  }
+  
+
+.navbar{
+    font-family: "Quattrocento Sans", sans-serif;
+    background-color: #4F6F52;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
+
+.marpad{
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    padding: 0 10vh;
+}
+
+.nav-link{
+    color: white;
+}
+
+.nav-link:hover{
+    color: #d8d8d8;
+}
+
+.active{
+    font-weight: bold;
+}
+
+.welcome-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: max-content;
+}
+
+.footext{
+    font-family: 'Quattrocento Sans', sans-serif;
+    font-size: 1em;
+    color: white;
+}
+
+h1{
+    font-family: 'Quattrocento', serif;
+    font-weight: bold;
+    color: #1A4D2E;
+}
+
+.cont-text{
+    font-family: 'Quattrocento Sans', sans-serif;
+    font-size: 1.5em;
+    margin-top: 2vh;
+    color: #1A4D2E;
+}
+
+.facility-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: max-content;
+}
+
+.card-cont{
+    margin-top: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.card {
+    width: 25vw;
+    height: 35vh;
+    padding: 5vh;
+    margin: 0 2vw;
+    background-color: #F5EFE6;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+.card-image {
+    width: auto;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 10px 10px 0 0;
+  }
+  
+.card-content {
+    padding: 20px;
+  }
+  
+.card-content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+
+.review-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: max-content;
+}
+
+footer{
+    font-family: "Quattrocento Sans", sans-serif;
+    background-color: #4F6F52;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
+
+.icon-social{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 10vw;
+    margin-top: 2vh;
+}
+
+.fa-brands{
+    font-size: 2em;
+    color: white;
+}
+
+.fa-brands:hover{
+    color: #cecece;
+}
