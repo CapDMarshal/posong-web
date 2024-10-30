@@ -1,41 +1,55 @@
 <?php
-session_start();
-include 'config.php'; // Koneksi ke database
+include 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_SESSION['user_id']; // Ambil ID pengguna dari session
-    $amount = $_POST['amount']; // Jumlah pembayaran
-    $reservationId = $_POST['reservation_id']; // ID reservasi yang terkait
+    $name = $_POST['name'];
+    $people = $_POST['people'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $room_id = $_POST['room_id'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $event_type = $_POST['event_type'];
 
-    // Insert data pembayaran ke database
-    $stmt = $conn->prepare("INSERT INTO payment (user_id, amount, reservation_id) VALUES (?, ?, ?)");
-    $stmt->bind_param("idi", $userId, $amount, $reservationId);
-    
-    if ($stmt->execute()) {
-        echo "Pembayaran berhasil! ID Pembayaran: " . $stmt->insert_id;
+    // Handle image upload
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'assets/uploads/';
+        
+        // Check if the uploads directory exists and is writable
+        if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
+            echo "Directory 'uploads' does not exist or is not writable.";
+            exit;
+        }
+
+        $uploadFile = $uploadDir . basename($_FILES['photo']['name']);
+        if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadFile)) {
+            $photoUrl = $uploadFile;
+        } else {
+            echo "Gagal mengunggah foto.";
+            exit;
+        }
     } else {
-        echo "Gagal melakukan pembayaran: " . $stmt->error;
+        echo "Harap unggah bukti pembayaran.";
+        exit;
     }
 
-    $stmt->close();
+    // Insert reservation into the database
+    $sql = "INSERT INTO reservations (user_name, user_email, phone_number, room_id, date, time, event_type, reservation_status, photo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)";
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("sssissss", $name, $email, $phone, $room_id, $date, $time, $event_type, $photoUrl);
+
+        if ($stmt->execute()) {
+            echo "Pembayaran berhasil dilakukan!";
+        } else {
+            echo "Gagal melakukan pembayaran: " . $stmt->error;
+        }
+
+        $stmt->close();
+    } else {
+        echo "Gagal mempersiapkan statement: " . $conn->error;
+    }
 }
-
-$conn->close();
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran</title>
-</head>
-<body>
-    <h1>Pembayaran</h1>
-    <form method="post" action="payment.php">
-        Jumlah Pembayaran: <input type="number" name="amount" required><br>
-        ID Reservasi: <input type="number" name="reservation_id" required><br>
-        <button type="submit">Bayar</button>
-    </form>
-</body>
-</html>
