@@ -27,7 +27,7 @@
                     <h2>Ketentuan</h2>
                     <li>Harga : Rp. 600.000,00 / Paket (10 Orang)</li>
                 </div>
-                <button type="button" style="width: 50%; align-self: flex-end;">Booking</button>
+                <a style="width: 50%; align-self: flex-end;" href="./reservation.php"><button type="button" style="width: 100%" >Booking</button></a>
             </div>
         </div>
     </div>

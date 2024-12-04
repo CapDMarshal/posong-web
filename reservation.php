@@ -1,12 +1,14 @@
 <?php
 include 'config.php';
-function isWeekend($date) {
+function isWeekend($date)
+{
     $timestamp = strtotime($date);
     $day = date('N', $timestamp);
     return ($day >= 6);
 }
 
-function updateTotalCapacity($conn, $room_id, $date) {
+function updateTotalCapacity($conn, $room_id, $date)
+{
     // Initialize total_capacity
     $total_capacity = 0;
     $reservation_count = 0;
@@ -78,14 +80,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
-<form id="reservationForm" method="post" action="reservation.php">
+    <?php include './assets/layout/head.php'; ?>
+    <title>Formulir Reservasi</title>
+    <?php include './assets/layout/navbar.php'; ?>
+    <div class="content-component marpad">
+        <div class="left-title">
+            <h1>Camp Biasa</h1>
+        </div>
+        <div class="img-container" style="width: 100%; height: 550px;">
+            <img src="./assets/img/reservcamp.png" alt="camp1" class="card-img" style="height:550px; object-fit:cover;">
+        </div>
+        <div class="detail-container">
+            
+        </div>
+    </div>
+    <!-- <form id="reservationForm" method="post" action="reservation.php">
     Nama: <input type="text" name="name" required><br>
     jumlah orang: <input type="number" name="people" required><br>
     Email: <input type="email" name="email" required><br>
@@ -102,132 +120,134 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <span id="capacityResult"></span><br>
     <input type="hidden" name="reservation_status" id="reservationStatus">
     <button type="button" class="btn btn-primary" onclick="submitFormAndShowModal()">Reservasi</button>
-</form>
+</form> -->
+    <?php include './assets/layout/footer.php' ?>
 
 
-<!-- Payment Modal -->
-<!-- Payment Modal -->
-<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="paymentModalLabel">Payment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h5>Harap lakukan pembayaran sebesar</h5>
-                <h3 id="paymentAmount"></h3>
-                
-                <form id="paymentForm" method="post" action="payment.php" enctype="multipart/form-data">
-                    <input type="hidden" name="name" id="modalName">
-                    <input type="hidden" name="people" id="modalPeople">
-                    <input type="hidden" name="email" id="modalEmail">
-                    <input type="hidden" name="phone" id="modalPhone">
-                    <input type="hidden" name="room_id" id="modalRoomId">
-                    <input type="hidden" name="date" id="modalDate">
-                    <input type="hidden" name="time" id="modalTime">
-                    <input type="hidden" name="event_type" id="modalEventType">
-                    <label for="modalPhoto">Upload Bukti Pembayaran:</label>
-                    <input type="file" name="photo" id="modalPhoto" accept="image/*" required><br>
-                    <button type="submit" class="btn btn-primary">Proceed to Payment</button>
-                </form>
+    <!-- Payment Modal -->
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Harap lakukan pembayaran sebesar</h5>
+                    <h3 id="paymentAmount"></h3>
+
+                    <form id="paymentForm" method="post" action="payment.php" enctype="multipart/form-data">
+                        <input type="hidden" name="name" id="modalName">
+                        <input type="hidden" name="people" id="modalPeople">
+                        <input type="hidden" name="email" id="modalEmail">
+                        <input type="hidden" name="phone" id="modalPhone">
+                        <input type="hidden" name="room_id" id="modalRoomId">
+                        <input type="hidden" name="date" id="modalDate">
+                        <input type="hidden" name="time" id="modalTime">
+                        <input type="hidden" name="event_type" id="modalEventType">
+                        <label for="modalPhoto">Upload Bukti Pembayaran:</label>
+                        <input type="file" name="photo" id="modalPhoto" accept="image/*" required><br>
+                        <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-document.getElementById('checkCapacityButton').addEventListener('click', function() {
-    var room_id = document.querySelector('input[name="room_id"]').value;
-    var date = document.querySelector('input[name="date"]').value;
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('checkCapacityButton').addEventListener('click', function() {
+            var room_id = document.querySelector('input[name="room_id"]').value;
+            var date = document.querySelector('input[name="date"]').value;
 
-    if (room_id && date) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'check_capacity.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                var capacityResult = document.getElementById('capacityResult');
-                if (response.success) {
-                    capacityResult.textContent = 'Sisa kapasitas: ' + response.remaining_capacity;
-                } else {
-                    capacityResult.textContent = 'Error: ' + response.message;
-                }
-            }
-        };
-        xhr.send('room_id=' + room_id + '&date=' + date);
-    } else {
-        alert('Please enter both room ID and date.');
-    }
-});
-
-$('#paymentModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget);
-    var modal = $(this);
-    modal.find('#modalName').val($('input[name="name"]').val());
-    modal.find('#modalPeople').val($('input[name="people"]').val());
-    modal.find('#modalEmail').val($('input[name="email"]').val());
-    modal.find('#modalPhone').val($('input[name="phone"]').val());
-    modal.find('#modalRoomId').val($('input[name="room_id"]').val());
-    modal.find('#modalDate').val($('input[name="date"]').val());
-    modal.find('#modalTime').val($('input[name="time"]').val());
-    modal.find('#modalEventType').val($('select[name="event_type"]').val());
-});
-
-function submitFormAndShowModal() {
-    var form = document.getElementById('reservationForm');
-    var formData = new FormData(form);
-
-    // Perform the form submission via AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'reservation.php', true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = xhr.responseText;
-            if (response.includes('Reservasi berhasil dibuat!')) {
-                // Update the modal with the form data
-                $('#modalName').val($('input[name="name"]').val());
-                $('#modalPeople').val($('input[name="people"]').val());
-                $('#modalEmail').val($('input[name="email"]').val());
-                $('#modalPhone').val($('input[name="phone"]').val());
-                $('#modalRoomId').val($('input[name="room_id"]').val());
-                $('#modalDate').val($('input[name="date"]').val());
-                $('#modalTime').val($('input[name="time"]').val());
-                $('#modalEventType').val($('select[name="event_type"]').val());
-
-                // Calculate and display the payment amount
-                var room_id = $('input[name="room_id"]').val();
-                var date = $('input[name="date"]').val();
-                var voucher_code = $('input[name="voucher_code"]').val();
-                var xhrPrice = new XMLHttpRequest();
-                xhrPrice.open('POST', 'calculate_price.php', true);
-                xhrPrice.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhrPrice.onreadystatechange = function() {
-                    if (xhrPrice.readyState === 4 && xhrPrice.status === 200) {
-                        var responsePrice = JSON.parse(xhrPrice.responseText);
-                        if (responsePrice.success) {
-                            $('#paymentAmount').text('Rp. ' + responsePrice.final_price);
+            if (room_id && date) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'check_capacity.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        var capacityResult = document.getElementById('capacityResult');
+                        if (response.success) {
+                            capacityResult.textContent = 'Sisa kapasitas: ' + response.remaining_capacity;
                         } else {
-                            $('#paymentAmount').text('Error: ' + responsePrice.message);
+                            capacityResult.textContent = 'Error: ' + response.message;
                         }
                     }
                 };
-                xhrPrice.send('room_id=' + room_id + '&date=' + date + '&voucher_code=' + voucher_code);
-
-                // Show the modal
-                $('#paymentModal').modal('show');
+                xhr.send('room_id=' + room_id + '&date=' + date);
             } else {
-                alert('Gagal membuat reservasi: ' + response);
+                alert('Please enter both room ID and date.');
             }
+        });
+
+        $('#paymentModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+            modal.find('#modalName').val($('input[name="name"]').val());
+            modal.find('#modalPeople').val($('input[name="people"]').val());
+            modal.find('#modalEmail').val($('input[name="email"]').val());
+            modal.find('#modalPhone').val($('input[name="phone"]').val());
+            modal.find('#modalRoomId').val($('input[name="room_id"]').val());
+            modal.find('#modalDate').val($('input[name="date"]').val());
+            modal.find('#modalTime').val($('input[name="time"]').val());
+            modal.find('#modalEventType').val($('select[name="event_type"]').val());
+        });
+
+        function submitFormAndShowModal() {
+            var form = document.getElementById('reservationForm');
+            var formData = new FormData(form);
+
+            // Perform the form submission via AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'reservation.php', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = xhr.responseText;
+                    if (response.includes('Reservasi berhasil dibuat!')) {
+                        // Update the modal with the form data
+                        $('#modalName').val($('input[name="name"]').val());
+                        $('#modalPeople').val($('input[name="people"]').val());
+                        $('#modalEmail').val($('input[name="email"]').val());
+                        $('#modalPhone').val($('input[name="phone"]').val());
+                        $('#modalRoomId').val($('input[name="room_id"]').val());
+                        $('#modalDate').val($('input[name="date"]').val());
+                        $('#modalTime').val($('input[name="time"]').val());
+                        $('#modalEventType').val($('select[name="event_type"]').val());
+
+                        // Calculate and display the payment amount
+                        var room_id = $('input[name="room_id"]').val();
+                        var date = $('input[name="date"]').val();
+                        var voucher_code = $('input[name="voucher_code"]').val();
+                        var xhrPrice = new XMLHttpRequest();
+                        xhrPrice.open('POST', 'calculate_price.php', true);
+                        xhrPrice.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhrPrice.onreadystatechange = function() {
+                            if (xhrPrice.readyState === 4 && xhrPrice.status === 200) {
+                                var responsePrice = JSON.parse(xhrPrice.responseText);
+                                if (responsePrice.success) {
+                                    $('#paymentAmount').text('Rp. ' + responsePrice.final_price);
+                                } else {
+                                    $('#paymentAmount').text('Error: ' + responsePrice.message);
+                                }
+                            }
+                        };
+                        xhrPrice.send('room_id=' + room_id + '&date=' + date + '&voucher_code=' + voucher_code);
+
+                        // Show the modal
+                        $('#paymentModal').modal('show');
+                    } else {
+                        alert('Gagal membuat reservasi: ' + response);
+                    }
+                }
+            };
+            xhr.send(formData);
         }
-    };
-    xhr.send(formData);
-}
-</script>
+    </script>
 </body>
+
 </html>
