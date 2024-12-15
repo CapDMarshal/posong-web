@@ -127,6 +127,16 @@ h1{
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+
+.card-login {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #F5EFE6;
+    padding: 20px;
+}
   
 .card-image {
     width: auto;
