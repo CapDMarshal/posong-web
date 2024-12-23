@@ -185,8 +185,9 @@ h1{
     border: 1px solid #ccc;
 }
 
-.basicbtn{
-    width: 80%;
+.basicbtn {
+    width: 150px; /* Fixed width */
+    height: 40px; /* Fixed height */
     margin: 10px;
     padding: 10px;
     border-radius: 15px;
@@ -195,7 +196,10 @@ h1{
     color: white;
     text-decoration: none;
     transition: ease-in-out 0.5s;
+    text-align: center;
+    line-height: 20px; /* Adjust line-height for vertical alignment */
 }
+
 .basicbtn:hover {
     transition: ease-in-out 0.5s;
     background-color: #10301D;
@@ -252,4 +256,85 @@ padding-right: 10vw;
 
 .fa-brands:hover{
     color: #cecece;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 20px;
+    }
+
+    .card-login {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        margin: 20px 0; /* Add top and bottom margins */
+        border-radius: 25px;
+    }
+
+    .left-section{
+        width: 100%;
+        height: 40vh;
+        border-radius: 25px 25px 0 0;
+    } 
+    .right-section {
+        width: 100%;
+        height: 40vh;
+        border-radius: 0 0 25px 25px;
+    }
+
+    .left-section input, .basicbtn {
+        width: 75%;
+    }
+
+    .right-section {
+        padding: 20px;
+    }
+
+    a.basicbtn{
+        width: 65%;
+    }
+
+    .right-section h1, .right-section p {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 20px;
+    }
+
+    .card-login {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        margin: 20px 0; /* Add top and bottom margins */
+        border-radius: 25px;
+    }
+
+    .left-section {
+        width: 100%;
+        border-radius: 25px 25px 0 0;
+    }
+    .right-section {
+        width: 100%;
+        border-radius: 0 0 25px 25px;
+    }
+
+    .left-section input {
+        width: 100%;
+    }
+
+    .right-section {
+        padding: 20px;
+    }
+
+    a.basicbtn{
+        width: 65%;
+    }
+
+    .right-section h1, .right-section p {
+        font-size: 1em;
+    }
 }
