@@ -49,19 +49,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login</title>
 </head>
 <body>
-    <div class="content-container">
-        <div class="card-login col-12">
+    <div class="login-container">
+        <div class="card-login col-6">
             <div class="left-section col-6">
                 <form method="post" action="login.php">
                     <h1>Login ke akun anda</h1>
-                    Email: <input type="email" name="email" required><br>
-                    Password: <input type="password" name="password" required><br>
-                    <button type="submit">Login</button>
-                    <p>Belum punya akun?<a href="register.php">daftar disini!</a></p>
+                    <hr class="col-12" style="height:3px;border-width:2px; opacity:1; color:#1A4D2E; background-color:#1A4D2E;" >
+                    <input type="email" name="email" placeholder="Email" required><br>
+                    <input type="password" name="password" placeholder="Password" required><br>
+                    <button class="basicbtn" type="submit">Login</button>
                 </form>
             </div>
             <div class="right-section col-6">
-                <h1>Hey, Welcome</h1>
+                <h1>Selamat datang</h1>
+                <hr class="col-10" style="height:3px;border-width:2px; opacity:1; color:#F2F2F2; background-color:#F2F2F2;" >
+                <p>Apakah anda belum punya akun?</p>
+                <a class="basicbtn" href="register.php">Sign Up</a>
             </div>
         </div>
     </div>
