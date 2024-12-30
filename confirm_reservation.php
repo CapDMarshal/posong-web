@@ -1,7 +1,5 @@
 <?php
 include 'session.php';
-requireLogin();
-requireAdmin();
 include 'config.php';
 
 // Menampilkan daftar reservasi yang belum dikonfirmasi

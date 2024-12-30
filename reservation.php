@@ -67,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $is_weekend = isWeekend($date) ? 1 : 0;
     $price = $is_weekend ? $weekend_price : $price;
 
-    $sql = "INSERT INTO reservations (user_name, user_email, phone_number, room_id, date, time, event_type, reservation_status, is_weekend, price)
-            VALUES ('$name', '$email', '$phone', $room_id, '$date', '$time', '$event_type', 'pending', $is_weekend, $price)";
+    $sql = "INSERT INTO reservations (user_name, user_email, phone_number, room_id, date, time, event_type, reservation_status, people, is_weekend, price)
+            VALUES ('$name', '$email', '$phone', $room_id, '$date', '$time', '$event_type', 'pending', $orang, $is_weekend, $price)";
 
     if ($conn->query($sql) === TRUE) {
         echo "Reservasi berhasil dibuat!";
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
         </div>
     </div>
-    <!-- <form id="reservationForm" method="post" action="reservation.php">
+    <form id="reservationForm" method="post" action="reservation.php">
     Nama: <input type="text" name="name" required><br>
     jumlah orang: <input type="number" name="people" required><br>
     Email: <input type="email" name="email" required><br>
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <span id="capacityResult"></span><br>
     <input type="hidden" name="reservation_status" id="reservationStatus">
     <button type="button" class="btn btn-primary" onclick="submitFormAndShowModal()">Reservasi</button>
-</form> -->
+</form>
     <?php include './assets/layout/footer.php' ?>
 
 

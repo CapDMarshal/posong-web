@@ -1,7 +1,5 @@
 <?php
 include 'session.php';
-requireLogin();
-requireAdmin();
 include 'config.php';
 
 echo "<h1>Kelola Review</h1>";
