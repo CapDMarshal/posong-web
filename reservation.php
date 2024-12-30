@@ -71,7 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES ('$name', '$email', '$phone', $room_id, '$date', '$time', '$event_type', 'pending', $orang, $is_weekend, $price)";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Reservasi berhasil dibuat!";
+        $reservation_id = $conn->insert_id;
+        echo "Reservasi berhasil dibuat! ID reservasi anda adalah $reservation_id.";
     } else {
         echo "Gagal membuat reservasi: " . $conn->error;
     }
@@ -102,29 +103,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="detail-container">
             
         </div>
+        <div class="container mt-5">
+            <div class="card w-100 h-50 mx-auto">
+                <div class="card-header">
+                    <h3>Formulir Reservasi</h3>
+                </div>
+                <div class="card-body">
+                    <form id="reservationForm" method="post" action="reservation.php">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name">Nama:</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="people">Jumlah Orang:</label>
+                                    <input type="number" class="form-control" name="people" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Telepon:</label>
+                                    <input type="text" class="form-control" name="phone" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="roomSelect">ID Ruangan:</label>
+                                    <select class="form-control" name="room_id" id="roomSelect" required>
+                                        <option value="">Pilih Ruangan</option>
+                                        <?php
+                                        $room_query = "SELECT room_id, room_name FROM rooms WHERE total_capacity > 0";
+                                        $result = $conn->query($room_query);
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<option value='" . $row['room_id'] . "'>" . $row['room_name'] . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date">Tanggal:</label>
+                                    <input type="date" class="form-control" name="date" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="time">Waktu:</label>
+                                    <input type="time" class="form-control" name="time" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="event_type">Jenis Acara:</label>
+                                    <select class="form-control" name="event_type">
+                                        <option value='custom'>custom</option>
+                                        <option value='regular'>regular</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="voucherCode">Kode Voucher:</label>
+                                    <input type="text" class="form-control" name="voucher_code" id="voucherCode">
+                                </div>
+                                <button type="button" id="checkCapacityButton" class="btn btn-info">Cek Sisa Kapasitas</button>
+                                <span id="capacityResult"></span><br>
+                                <input type="hidden" name="reservation_status" id="reservationStatus">
+                                <button type="button" class="btn btn-primary mt-3" onclick="submitFormAndShowModal()">Reservasi</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <form id="reservationForm" method="post" action="reservation.php">
-    Nama: <input type="text" name="name" required><br>
-    jumlah orang: <input type="number" name="people" required><br>
-    Email: <input type="email" name="email" required><br>
-    Telepon: <input type="text" name="phone" required><br>
-    ID Ruangan: <input type="number" name="room_id" required><br>
-    Tanggal: <input type="date" name="date" required><br>
-    Waktu: <input type="time" name="time" required><br>
-    Jenis Acara: <select name='event_type'>
-        <option value='custom'>custom</option>
-        <option value='regular'>regular</option>
-    </select><br>
-    Kode Voucher: <input type="text" name="voucher_code" id="voucherCode"><br>
-    <button type="button" id="checkCapacityButton">Cek Sisa Kapasitas</button>
-    <span id="capacityResult"></span><br>
-    <input type="hidden" name="reservation_status" id="reservationStatus">
-    <button type="button" class="btn btn-primary" onclick="submitFormAndShowModal()">Reservasi</button>
-</form>
     <?php include './assets/layout/footer.php' ?>
 
 
-    <!-- Payment Modal -->
     <!-- Payment Modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -138,19 +193,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="modal-body">
                     <h5>Harap lakukan pembayaran sebesar</h5>
                     <h3 id="paymentAmount"></h3>
-
-                    <form id="paymentForm" method="post" action="payment.php" enctype="multipart/form-data">
-                        <input type="hidden" name="name" id="modalName">
-                        <input type="hidden" name="people" id="modalPeople">
-                        <input type="hidden" name="email" id="modalEmail">
-                        <input type="hidden" name="phone" id="modalPhone">
-                        <input type="hidden" name="room_id" id="modalRoomId">
-                        <input type="hidden" name="date" id="modalDate">
-                        <input type="hidden" name="time" id="modalTime">
-                        <input type="hidden" name="event_type" id="modalEventType">
-                        <label for="modalPhoto">Upload Bukti Pembayaran:</label>
-                        <input type="file" name="photo" id="modalPhoto" accept="image/*" required><br>
-                        <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+                    <h5>ID reservasi anda adalah <span id="reservationId"></span></h5>
+                    <form id="paymentForm" method="post" action="payment.php">
+                        <input type="hidden" name="reservation_id" id="modalReservationId">
+                        <button type="button" class="btn btn-primary" onclick="redirectToPayment()">Proceed to Payment</button>
                     </form>
                 </div>
             </div>
@@ -161,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         document.getElementById('checkCapacityButton').addEventListener('click', function() {
-            var room_id = document.querySelector('input[name="room_id"]').value;
+            var room_id = document.querySelector('select[name="room_id"]').value;
             var date = document.querySelector('input[name="date"]').value;
 
             if (room_id && date) {
@@ -192,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             modal.find('#modalPeople').val($('input[name="people"]').val());
             modal.find('#modalEmail').val($('input[name="email"]').val());
             modal.find('#modalPhone').val($('input[name="phone"]').val());
-            modal.find('#modalRoomId').val($('input[name="room_id"]').val());
+            modal.find('#modalRoomId').val($('select[name="room_id"]').val());
             modal.find('#modalDate').val($('input[name="date"]').val());
             modal.find('#modalTime').val($('input[name="time"]').val());
             modal.find('#modalEventType').val($('select[name="event_type"]').val());
@@ -209,18 +255,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var response = xhr.responseText;
                     if (response.includes('Reservasi berhasil dibuat!')) {
+                        var reservationId = response.match(/ID reservasi anda adalah (\d+)/)[1];
+                        $('#reservationId').text(reservationId);
+                        $('#modalReservationId').val(reservationId);
+
                         // Update the modal with the form data
                         $('#modalName').val($('input[name="name"]').val());
                         $('#modalPeople').val($('input[name="people"]').val());
                         $('#modalEmail').val($('input[name="email"]').val());
                         $('#modalPhone').val($('input[name="phone"]').val());
-                        $('#modalRoomId').val($('input[name="room_id"]').val());
+                        $('#modalRoomId').val($('select[name="room_id"]').val());
                         $('#modalDate').val($('input[name="date"]').val());
                         $('#modalTime').val($('input[name="time"]').val());
                         $('#modalEventType').val($('select[name="event_type"]').val());
 
                         // Calculate and display the payment amount
-                        var room_id = $('input[name="room_id"]').val();
+                        var room_id = $('select[name="room_id"]').val();
                         var date = $('input[name="date"]').val();
                         var voucher_code = $('input[name="voucher_code"]').val();
                         var xhrPrice = new XMLHttpRequest();
@@ -246,6 +296,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             };
             xhr.send(formData);
+        }
+
+        function redirectToPayment() {
+            var reservationId = $('#modalReservationId').val();
+            window.location.href = 'payment.php?reservation_id=' + reservationId;
         }
     </script>
 </body>

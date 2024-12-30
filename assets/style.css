@@ -340,6 +340,12 @@ padding-right: 10vw;
 }
 
 /* Styles for the admin dashboard sidebar */
+.container-fluid {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh; /* Ensure the container takes the full height */
+}
+
 .sidebar {
     position: fixed;
     top: 0;
@@ -349,6 +355,8 @@ padding-right: 10vw;
     padding: 48px 0 0;
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
     background-color: #4F6F52; /* Updated background color */
+    flex: 0 0 220px; /* Fixed width for the sidebar */
+    height: 100%; /* Ensure the sidebar takes the full height */
 }
 
 .sidebar-sticky {
@@ -379,7 +387,24 @@ padding-right: 10vw;
     margin-bottom: 1rem;
 }
 
+.main-content {
+    flex: 1; /* Take up the remaining space */
+    padding: 20px; /* Add padding for spacing */
+    margin-left: 120px; /* Ensure the main content is not overlapped by the sidebar */
+}
+
+.row-reverse {
+    display: flex;
+    flex-direction: row-reverse;
+
+}
+
 @media (max-width: 768px) {
+    .main-content {
+        padding: 20px; /* Adjust padding for smaller screens */
+        margin-left: 0; /* Remove margin for smaller screens */
+    }
+
     .sidebar {
         display: none;
     }
