@@ -6,9 +6,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     $query = "
-        SELECT user_id, email, password, NULL as admin_id FROM users WHERE email = '$email'
+        SELECT user_id, email, password, email as user_email, NULL as admin_id FROM users WHERE email = '$email'
         UNION
-        SELECT admin_id as user_id, email, password, admin_id FROM admin WHERE email = '$email'
+        SELECT admin_id as user_id, email, password, NULL as user_email, admin_id FROM admin WHERE email = '$email'
     ";
     $result = $conn->query($query);
 
@@ -23,7 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($_SESSION['role'] === 'admin') {
                     header("Location: ./admin/admin_dashboard.php");
                 } else {
-                    header("Location: review.php");
+                    $reservation_check_query = "SELECT COUNT(*) as reservation_count FROM reservations WHERE user_email = '" . $user['user_email'] . "'";
+                    $reservation_check_result = $conn->query($reservation_check_query);
+                    $reservation_count = $reservation_check_result->fetch_assoc()['reservation_count'];
+
+                    if ($reservation_count > 0) {
+                        header("Location: review.php");
+                    } else {
+                        header("Location: reservation.php");
+                    }
                 }
                 exit;
             }
