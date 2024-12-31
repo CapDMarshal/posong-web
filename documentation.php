@@ -20,7 +20,7 @@ include 'session.php';
     <div class="content-component marpad">
         <?php
         // Fetch reviews from the database
-        $query = "SELECT Review.review_id, Review.rating, Review.comment, Review.photo, users.name FROM Review JOIN users ON Review.user_id = users.user_id";
+        $query = "SELECT review_id, rating, comment, photo, users.name FROM review JOIN users ON review.user_id = users.user_id";
         $result = $conn->query($query);
 
         if ($result && $result->num_rows > 0) {

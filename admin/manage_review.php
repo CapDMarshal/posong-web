@@ -1,68 +1,58 @@
 <?php
-include '../session.php';
-include '../config.php';
-?>
+include 'config.php';
+include 'session.php';
 
-<h1>Kelola Review</h1>
-
-<?php
-// Menampilkan daftar review
-$query = "SELECT Review.review_id, Review.rating, Review.comment, Review.photo, Review.is_visible, users.name FROM Review JOIN users ON Review.user_id = users.user_id";
+$query = "SELECT review_id, rating, comment, photo, users.name FROM review JOIN users ON review.user_id = users.user_id";
 $result = $conn->query($query);
-
-if ($result) {
-    if ($result->num_rows > 0) {
 ?>
-        <table class='table table-striped'>
-            <thead>
-                <tr>
-                    <th>ID Review</th>
-                    <th>User</th>
-                    <th>Rating</th>
-                    <th>Komentar</th>
-                    <th>Foto</th>
-                    <th>Visibilitas</th>
-                    
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php while($review = $result->fetch_assoc()) { ?>
-                <tr>
-                    <td><?php echo $review['review_id']; ?></td>
-                    <td><?php echo $review['name']; ?></td>
-                    <td><?php echo $review['rating']; ?></td>
-                    <td><?php echo $review['comment']; ?></td>
-                    <td><img src="<?php echo "../" . $review['photo']; ?>" alt="review photo" style="width: 100px; height: auto;"></td>
-                    <td><?php echo $review['is_visible'] ? "Terlihat" : "Tidak Terlihat"; ?></td>
-                    <td>
-                        <a href='admin_dashboard.php?page=manage_review&delete=<?php echo $review['review_id']; ?>' class='btn btn-danger btn-sm'>Hapus</a>
-                        <a href='admin_dashboard.php?page=manage_review&toggle_visibility=<?php echo $review['review_id']; ?>' class='btn btn-primary btn-sm'>Tampilkan/Sembunyikan</a>
-                    </td>
-                </tr>
-            <?php } ?>
-            </tbody>
-        </table>
-<?php
-    } else {
-        echo "Tidak ada review yang tersedia.";
-    }
-} else {
-    echo "Error executing query: " . $conn->error;
-}
 
-// Menghapus atau menonaktifkan review
-if (isset($_GET['delete'])) {
-    $review_id = $_GET['delete'];
-    $sql = "DELETE FROM Review WHERE review_id = $review_id";
-    $conn->query($sql);
-    header("Location: admin_dashboard.php?page=manage_review");
-    exit;
-} elseif (isset($_GET['toggle_visibility'])) {
-    $review_id = $_GET['toggle_visibility'];
-    $sql = "UPDATE Review SET is_visible = NOT is_visible WHERE review_id = $review_id";
-    $conn->query($sql);
-    header("Location: admin_dashboard.php?page=manage_review");
-    exit;
-}
-?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Reviews</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <?php include './assets/layout/head.php'; ?>
+    <title>Manage Reviews</title>
+    <?php include './assets/layout/navbar.php'; ?>
+    <div class="content-component marpad">
+        <?php
+        if ($result && $result->num_rows > 0) {
+            while ($review = $result->fetch_assoc()) {
+        ?>
+                <div class="card mb-3" style="width: auto; height: auto; margin: 0;">
+                    <div class="card-title">
+                        <h2>Review</h2>
+                    </div>
+                    <div class="card-body" style="display: flex; flex-direction: row;">
+                        <div class="card-left col">
+                            <img src="<?php echo $review['photo']; ?>" alt="review photo" class="card-img" style="width: auto; height: 250px; object-fit: contain;">
+                        </div>
+                        <div class="card-mid col">
+                            <h2>Review Details</h2>
+                            <div class="mid-content">
+                                <ul>
+                                    <li>User: <?php echo $review['name']; ?></li>
+                                    <li>Rating: <?php echo $review['rating']; ?></li>
+                                    <li>Comment: "<?php echo $review['comment']; ?>"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <?php
+            }
+        } else {
+            echo "Tidak ada review yang tersedia.";
+        }
+        ?>
+    </div>
+    <?php include './assets/layout/footer.php'; ?>
+</body>
+
+</html>
