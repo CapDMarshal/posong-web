@@ -281,27 +281,6 @@ php -S localhost:8000
    - Verify session directory permissions
    - Clear browser cookies
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-If you encounter any issues or have questions:
-
-1. Check the troubleshooting section
-2. Review the code comments
-3. Create an issue in the GitHub repository
-4. Contact the development team
-
 ## Future Enhancements
 
 - [ ] Online payment integration
@@ -313,5 +292,3 @@ If you encounter any issues or have questions:
 - [ ] API development
 
 ---
-
-**Built for Posong Tourism**
